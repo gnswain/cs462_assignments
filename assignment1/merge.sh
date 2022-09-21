@@ -1,4 +1,5 @@
 #! /bin/bash
+# !!! might have to change to /usr/bin/bash depending on location of bash
 
 # Graham Swain
 # September 23, 2022
