@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+#! /bin/bash
 
 # Graham Swain
 # September 23, 2022
@@ -112,6 +112,7 @@ fi
 
 
 echo $(date) "> Merged $file1 and $file2 into $file3" >> log.txt
+echo "$file1 merged with $file2"
 
 echo -e "\n-------------------- $file1 --------------------\n" > $file3
 cat $file1 >> $file3
