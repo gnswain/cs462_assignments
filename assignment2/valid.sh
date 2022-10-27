@@ -23,27 +23,48 @@ elif [[ -d "$1" ]]; then
 else
     if ! [[ -r "$1" ]]; then
         echo "ERROR: $1 does not have read permission"
-    exit 1
+        exit 1
     fi
     if ! [[ -w "$1" ]]; then
         echo "ERROR: $1 does not have write permission"
-    exit 1
+        exit 1
     fi
     if ! [[ -x "$1" ]]; then
         echo "ERROR: $1 does not have execute permission"
-    exit 1
+        exit 1
     fi
 fi
 
 # Gets the extension from the given file
-ext="${1##*.}"
-echo $ext
+ext=$(echo $1 | cut -d. -f2)
 
 if [[ $ext != 'iso' && $ext != 'oso' ]]; then
     echo "ERROR: \".$ext\" is not a valid file extension"
+    exit 1
 fi
 
 # Seems like a rudimentary way of doing it, does not care if header lines are in correct order
 awk -E check_headers.awk $1
+valid=$?
 
-# TODO check to see if .iso is in NC
+if [[ $valid == 1 ]]; then
+    exit 1
+fi
+
+if [[ $ext == 'iso' ]]; then
+    state=$(awk -F, '/^address/ {print $3}' $1 | xargs) # xargs strips whitespace
+    if [ "$state" != 'NC' ]; then
+        echo 'ERROR: In-state invoices must have "NC" as the state'
+        exit 1
+    fi
+fi
+
+cats=$(awk -F, '/^categories/ {print NF}' $1)
+items=$(awk -F, '/^items/ {print NF}' $1)
+
+if [[ $cats != $items ]]; then
+    echo "ERROR: invalid item quantities: $cats categories but $items items"
+    exit 1
+fi
+
+exit 0

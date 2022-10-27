@@ -6,20 +6,32 @@ BEGIN {cust = 0; add = 0; cate = 0; item = 0}
 /^items/ {item = 1}
 
 END {
-    if (!cust) {
-        print "No 'customer' header"
-        exit 1
-    }
-    if (!add) {
-        print "No 'address' header"
-        exit 1
-    }
-    if (!cate) {
-        print "No 'categories' header"
-        exit 1
-    }
-    if (!item) {
-        print "No 'items' header"
+    # uncomment this to have a more specific error message
+    # valid = 0
+    # if (cust == 1) {
+    #     print "ERROR: No 'customer' header"
+    #     valid = 1
+    # }
+    # if (add == 1) {
+    #     print "ERROR: No 'address' header"
+    #     valid = 1
+    # }
+    # if (cate == 1) {
+    #     print "ERROR: No 'categories' header"
+    #     valid = 1
+    # }
+    # if (item == 1) {
+    #     print "ERROR: No 'items' header"
+    #     valid = 1
+    # }
+    # if (valid == 1) {
+    #     print "Last header line:", $0
+    #     exit 1
+    # }
+
+    if (cust != 1 || add != 1 || cate != 1 || item != 1) {
+        print "ERROR: Missing header line"
+        print "Last header line:", $0
         exit 1
     }
 }
