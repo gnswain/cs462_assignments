@@ -1,5 +1,5 @@
-#! /bin/bash
-# !!! might have to change to /usr/bin/bash depending on location of bash
+#!/usr/bin/bash
+# !!! might have to change to /bin/bash depending on location of bash
 
 # Isaiah Hermance
 # Graham Swain
