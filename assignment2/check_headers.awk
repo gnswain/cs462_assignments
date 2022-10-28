@@ -8,19 +8,19 @@ BEGIN {cust = 0; add = 0; cate = 0; item = 0}
 END {
     # uncomment this to have a more specific error message
     # valid = 0
-    # if (cust == 1) {
+    # if (cust == 0) {
     #     print "ERROR: No 'customer' header"
     #     valid = 1
     # }
-    # if (add == 1) {
+    # if (add == 0) {
     #     print "ERROR: No 'address' header"
     #     valid = 1
     # }
-    # if (cate == 1) {
+    # if (cate == 0) {
     #     print "ERROR: No 'categories' header"
     #     valid = 1
     # }
-    # if (item == 1) {
+    # if (item == 0) {
     #     print "ERROR: No 'items' header"
     #     valid = 1
     # }

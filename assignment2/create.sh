@@ -75,13 +75,14 @@ fields=$(echo $fields | awk '{$1=$1;print}' | tr -s " " ",")
 
 itemsInPurchase=$(echo $itemsInPurchase | awk '{$1=$1;print}' | tr -s " " ",")
 
-newFile="customer:$name\n\nadress:$address\n\ncategories:$fields\n\nitems:$itemsInPurchase"
+newFile="customer:$name\n\naddress:$address\n\ncategories:$fields\n\nitems:$itemsInPurchase"
 
 echo -e $newFile > $newFileName
 
-
 #call valid
 echo -e "calling valid with $newFileName\n"
+
+chmod 777 $newFileName
 
 bash valid.sh $newFileName
 
