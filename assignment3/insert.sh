@@ -72,27 +72,34 @@ if [[ $# == 2 ]]; then
         ((count--))
     done
 
-    #set ENV var to category? have to pass it to awk somehow
-
 else
 
-    valid=0
-    until [ $valid ]; do
+    for i in ${!categories[@]}; do # this checks for index of category in the invoice
+        count=$(awk -F: "BEGIN { count = 0; IGNORECASE = 1;} /^${categories[$i]}/ { count++ } END {print count}" $fileName)
 
-        #insert record into invoice
+        count=$((${items[$i]} - $count)) # gets how many more items we need
 
-        recordsChanged+=1
+        while [[ $count > 0 ]]; do
+            echo -n "Please enter the name of a ${categories[$i]} item > "
+            read newItem
+            echo -n "Please enter a price per unit of $newItem > "
+            read newPrice
+            echo -n "Please enter the amount of $newItem units to purchase > "
+            read newQuantity
 
-        #run awk to check if missing records
+            echo
 
-        #valid=$?
+            appendToFile="${appendToFile}\n${categories[$i]}: $newItem, $newPrice, $newQuantity"
+            ((recordsChanged++))
 
+            ((count--))
+        done
     done
 
 fi
 
 echo -e $appendToFile >> $fileName
-echo -e "\n$recordsChanged records added to \"$fileName\" invoice"
+echo "$recordsChanged records added to \"$fileName\" invoice"
 
 #This gets a list of categories in the invoice, delimited by ','
 
