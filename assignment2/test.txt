@@ -1,0 +1,54 @@
+./create.sh -o shopping
+
+provided all correct input and received all correct output
+
+
+./create.sh -i shopping
+
+provided all correct input and received all correct output
+
+
+./create.sh -o shopping
+
+provided an in state (NC) abbreviation,
+script exits and states to use "-i" flag
+
+
+./create.sh -i shopping
+
+Provided a state abbreviation > 2 characters and script exits
+
+
+./create.sh
+
+Script asks for arguments until given BOTH a flag and filename. Proceeds to work after this
+is provided.
+
+> ./valid.sh
+prints: 'usage: valid.sh <file>'
+
+> ./valid.sh shopping.iso
+Runs script and exits with a status code of 0
+
+> ./valid.sh shopping.oso
+Runs script and exits with a status code of 0
+
+> ./valid.sh bad_shopping1.iso
+ERROR: Missing header line
+Last header line: items:4,6,2,4 
+
+> ./valid.sh out_state.iso
+ERROR: In-state invoices must have "NC" as the state
+
+> ./valid.sh too_many_categories.iso 
+ERROR: invalid item quantities: 5 categories but 4 items
+
+> ./valid.sh too_many_items.iso 
+ERROR: invalid item quantities: 4 categories but 5 items
+
+> ./valid.sh missing_row.iso 
+ERROR: Missing header line
+Last header line: items:4,6,2,4 
+
+> ./valid.sh broken.isi 
+ERROR: ".isi" is not a valid file extension

@@ -25,6 +25,14 @@ else
         echo "ERROR: $1 does not have read permission"
         exit 1
     fi
+    if ! [[ -w "$1" ]]; then
+        echo "ERROR: $1 does not have write permission"
+        exit 1
+    fi
+    if ! [[ -x "$1" ]]; then
+        echo "ERROR: $1 does not have execute permission"
+        exit 1
+    fi
 fi
 
 # Gets the extension from the given file
