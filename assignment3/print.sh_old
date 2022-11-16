@@ -11,10 +11,10 @@ if [[ $# == 2 ]]; then
         echo 'invalid flag, usage: print.sh <invoice filename> [-c]'
         exit 2
     fi
-    sortbyCategory=0 #0 in place of true. Will sort by category
+    sortByCategory=0 #0 in place of true. Will sort by category
 elif [[ $# == 1 ]]; then
     fileName=$1
-    sortbyCategory=1 #1 in place of false. Will sort by total cost
+    sortByCategory=1 #1 in place of false. Will sort by total cost
 else
     echo 'usage: print.sh <invoice filename> [-c]'
     exit 1
@@ -42,7 +42,7 @@ fi
 #    exit 7
 #fi
 
-#initialize the building of the latex file#\\usepackage{multicolumn}\n
+#initialize the building of the latex file
 
 tableFile="\\documentclass[11pt]{article}\n\\\begin{document}\n\\\begin{table}[ht]\n\\\begin{center}\n\\\begin{tabular}{|r r r r r|}\n\\hline\n\\multicolumn{5}{|c|}{"
 
@@ -57,35 +57,34 @@ tableFile+="$customerName}\\\\\ \n\\multicolumn{5}{|c|}{$customerAddress}\\\\\ \
 #insert invoice data
 
 startOfInvoiceData=$(grep -n '[iI]tems' $fileName | cut -d: -f1) # line of the file at which the invoice data starts
-((startOfInvoiceData++))
+((startOfInvoiceData += 2))
 tail -n +$startOfInvoiceData $fileName > tmp1.txt #creates temp file with invoice data to sort and read from
-
-echo '' > tmp2.txt
 
 while read -r currLine; do
 
     currTotal=$(echo $currLine | awk -F, '{total = $2 * $3; print total}')
 
-    currLine+=", $currTotal"
+    currLine+=", $currTotal\n"
 
-    echo -e $currLine >> tmp2.txt
-
+    echo -ne $currLine >> tmp2.txt
 done < tmp1.txt
 
-if [ sortbyCategory ]; then
+echo '----------------------------------------------------------------------'
+
+if [[ $sortByCategory == 0 ]]; then
     sort tmp2.txt > tmp3.txt
 else
-    sort -n -t -k4 tmp2.txt > tmp3.txt
+    sort -n -k5 tmp2.txt > tmp3.txt
 fi
 
 while IFS=, read -r categoryAndItem cost quantity total; do
 
-    category=$(echo $categoryAndItem | cut -d: -f1)
-    item=$(echo $categoryAndItem | cut -d: -f2)
+    category=$(echo $categoryAndItem | cut -d: f1 | tr -d)
+    item=$(echo $categoryAndItem | cut -d: f2 | tr -d)
 
     tableFile+="$category&$item&$cost&$quantity&$total\\\\\ \n"
 
-done < tmp3.txt
+done < tmp2.txt
 
 tableFile+="\\hline\\\end{tabular}\n\\\end{center}\n\\\end{table}\n\\\end{document}"
 
@@ -93,7 +92,7 @@ fileName=$(echo $fileName | cut -d. -f1)
 
 echo -e $tableFile > tmp.tex
 
-pdflatex -interaction=batchmode tmp.tex > /dev/null 
+pdflatex -interaction=batchmode tmp.tex #> /dev/null 
 
 #okular tmp.pdf
 
