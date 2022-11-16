@@ -60,8 +60,6 @@ startOfInvoiceData=$(grep -n '[iI]tems' $fileName | cut -d: -f1) # line of the f
 ((startOfInvoiceData++))
 tail -n +$startOfInvoiceData $fileName > tmp1.txt #creates temp file with invoice data to sort and read from
 
-echo '' > tmp2.txt
-
 while read -r currLine; do
 
     currTotal=$(echo $currLine | awk -F, '{total = $2 * $3; print total}')
@@ -72,10 +70,10 @@ while read -r currLine; do
 
 done < tmp1.txt
 
-if [ sortbyCategory ]; then
+if [[ sortbyCategory ]]; then
     sort tmp2.txt > tmp3.txt
 else
-    sort -n -t -k4 tmp2.txt > tmp3.txt
+    sort -n -t, -k4 tmp2.txt > tmp3.txt
 fi
 
 while IFS=, read -r categoryAndItem cost quantity total; do
