@@ -91,6 +91,6 @@ echo -e $tableFile > tmp.tex
 
 pdflatex -interaction=batchmode tmp.tex > /dev/null 
 
-#okular tmp.pdf
+okular tmp.pdf
 
-#rm tmp*.*
+rm tmp*.*
