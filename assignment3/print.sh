@@ -57,8 +57,9 @@ tableFile+="$customerName}\\\\\ \n\\multicolumn{5}{|c|}{$customerAddress}\\\\\ \
 #insert invoice data
 
 startOfInvoiceData=$(grep -n '[iI]tems' $fileName | cut -d: -f1) # line of the file at which the invoice data starts
-((startOfInvoiceData++))
+((startOfInvoiceData += 2))
 tail -n +$startOfInvoiceData $fileName > tmp1.txt #creates temp file with invoice data to sort and read from
+echo ' ' >> tmp1.txt
 
 while read -r currLine; do
 
@@ -70,7 +71,7 @@ while read -r currLine; do
 
 done < tmp1.txt
 
-if [[ sortbyCategory ]]; then
+if [[ $sortbyCategory == 1 ]]; then
     sort tmp2.txt > tmp3.txt
 else
     sort -n -t, -k4 tmp2.txt > tmp3.txt
