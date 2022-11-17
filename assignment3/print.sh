@@ -30,9 +30,6 @@ else
     if ! [[ -r "$1" ]]; then
         echo "ERROR: $1 does not have read permission"
         exit 5
-    elif ! [[ -w "$1" ]]; then
-        echo "ERROR: $1 does not have write permission"
-        exit 6
     fi
 fi
 
